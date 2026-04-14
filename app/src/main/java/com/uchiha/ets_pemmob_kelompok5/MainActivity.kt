@@ -15,26 +15,47 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ETS_Pemmob_Kelompok5Theme {
-                // 1. Inisialisasi NavController
                 val navController = rememberNavController()
 
-                // 2. NavHost untuk mengatur rute antar file
                 NavHost(
                     navController = navController,
-                    startDestination = "login_page" // Halaman awal saat aplikasi dibuka
+                    startDestination = "login"
                 ) {
-                    // Rute ke halaman Login (file login.kt)
-                    composable("login_page") {
+                    // 1. Rute ke halaman Login
+                    composable("login") {
                         LoginScreen(
-                            onNavigateToRegister = { navController.navigate("register_page") }
+                            // Ke Register jika klik "Daftar"
+                            onNavigateToRegister = {
+                                navController.navigate("register")
+                            },
+                            // Ke Dashboard jika klik "Log In"
+                            onLoginSuccess = {
+                                navController.navigate("dashboard") {
+                                    // Hapus halaman login dari history agar tidak bisa back ke login
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            }
                         )
                     }
 
-                    // Rute ke halaman Register (file register.kt)
-                    composable("register_page") {
+                    // 2. Rute ke halaman Register
+                    composable("register") {
                         RegisterScreen(
-                            onBackToLogin = { navController.popBackStack() }
+                            onBackToLogin = {
+                                navController.popBackStack()
+                            },
+                            onRegisterSuccess = {
+                                // Biasanya setelah daftar langsung masuk dashboard
+                                navController.navigate("dashboard") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            }
                         )
+                    }
+
+                    // 3. Rute ke halaman Dashboard
+                    composable("dashboard") {
+                        DashboardScreen()
                     }
                 }
             }

@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,25 +24,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uchiha.ets_pemmob_kelompok5.ui.theme.ETS_Pemmob_Kelompok5Theme
 
+// Note: Disarankan menggunakan MainActivity sebagai entry point utama.
+// Class login ini bisa dihapus jika kamu hanya menggunakan satu Activity.
 class login : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ETS_Pemmob_Kelompok5Theme {
-                LoginScreen(onNavigateToRegister = {})
+                // Memberikan aksi kosong agar tidak error saat dijalankan via class ini
+                LoginScreen(onNavigateToRegister = {}, onLoginSuccess = {})
             }
         }
     }
 }
 
 @Composable
-fun LoginScreen(onNavigateToRegister: () -> Unit) {
+fun LoginScreen(
+    onNavigateToRegister: () -> Unit,
+    onLoginSuccess: () -> Unit // Parameter untuk pindah ke Dashboard
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
-
-    // Warna Aplikasi
     val shopeeOrange = Color(0xFF23C72A)
 
     Column(
@@ -55,7 +58,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
     ) {
         Spacer(modifier = Modifier.height(80.dp))
 
-        // Placeholder Logo (Ganti dengan R.drawable.logo_kamu)
         Icon(
             painter = painterResource(id = android.R.drawable.ic_menu_send),
             contentDescription = "Logo",
@@ -65,7 +67,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Input Username/No HP
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
@@ -80,7 +81,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input Password
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -95,7 +95,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
             )
         )
 
-        // Lupa Password
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             TextButton(onClick = { /* Handle Lupa Password */ }) {
                 Text("Lupa Password?", color = Color(0xFF008BFF))
@@ -107,7 +106,12 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
         // Tombol Login
         Button(
             onClick = {
-                Toast.makeText(context, "Mencoba Login...", Toast.LENGTH_SHORT).show()
+                if (username.isNotEmpty() && password.isNotEmpty()) {
+                    Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
+                    onLoginSuccess() // Pindah ke Dashboard
+                } else {
+                    Toast.makeText(context, "Isi username dan password!", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,7 +124,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Divider atau
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
             Text("  ATAU  ", color = Color.Gray, fontSize = 12.sp)
@@ -129,7 +132,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Alternatif Login (Google/Facebook style)
         OutlinedButton(
             onClick = { /* Login Google */ },
             modifier = Modifier.fillMaxWidth().height(50.dp),
@@ -140,13 +142,12 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Footer Daftar
         Row(
             modifier = Modifier.padding(bottom = 32.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Baru di Marketplace?")
-            TextButton(onClick = { onNavigateToRegister() }) {
+            TextButton(onClick = { onNavigateToRegister() }) { // Pindah ke Register
                 Text("Daftar", color = shopeeOrange, fontWeight = FontWeight.Bold)
             }
         }
@@ -157,6 +158,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 @Composable
 fun LoginPreview() {
     ETS_Pemmob_Kelompok5Theme {
-        LoginScreen(onNavigateToRegister = {})
+        LoginScreen(onNavigateToRegister = {}, onLoginSuccess = {})
     }
 }

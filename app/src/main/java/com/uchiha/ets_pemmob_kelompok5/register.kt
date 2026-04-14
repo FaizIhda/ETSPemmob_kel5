@@ -31,7 +31,10 @@ class register : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ETS_Pemmob_Kelompok5Theme {
-                RegisterScreen(onBackToLogin = {})
+                RegisterScreen(
+                    onBackToLogin = {finish()},
+                    onRegisterSuccess = {}
+                )
             }
         }
     }
@@ -39,7 +42,8 @@ class register : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(onBackToLogin: () -> Unit) {
+fun RegisterScreen(onBackToLogin: () -> Unit,
+                   onRegisterSuccess: () -> Unit) {
     // State untuk input
     var fullName by remember { mutableStateOf("") }
     var emailOrPhone by remember { mutableStateOf("") }
@@ -54,7 +58,7 @@ fun RegisterScreen(onBackToLogin: () -> Unit) {
             TopAppBar(
                 title = { Text("Daftar", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { /* Navigasi balik */ }) {
+                    IconButton(onClick =  onBackToLogin ) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
                     }
                 }
@@ -134,6 +138,7 @@ fun RegisterScreen(onBackToLogin: () -> Unit) {
                 onClick = {
                     if (password == confirmPassword) {
                         Toast.makeText(context, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
+                        onRegisterSuccess()
                     } else {
                         Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
                     }
@@ -188,6 +193,8 @@ fun RegisterTextField(
 @Composable
 fun RegisterPreview() {
     ETS_Pemmob_Kelompok5Theme {
-        RegisterScreen(onBackToLogin = {})
+        RegisterScreen(
+            onBackToLogin = {},
+            onRegisterSuccess = {})
     }
 }
