@@ -4,13 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.uchiha.ets_pemmob_kelompok5.ui.theme.ETS_Pemmob_Kelompok5Theme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +15,29 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ETS_Pemmob_Kelompok5Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                // 1. Inisialisasi NavController
+                val navController = rememberNavController()
+
+                // 2. NavHost untuk mengatur rute antar file
+                NavHost(
+                    navController = navController,
+                    startDestination = "login_page" // Halaman awal saat aplikasi dibuka
+                ) {
+                    // Rute ke halaman Login (file login.kt)
+                    composable("login_page") {
+                        LoginScreen(
+                            onNavigateToRegister = { navController.navigate("register_page") }
+                        )
+                    }
+
+                    // Rute ke halaman Register (file register.kt)
+                    composable("register_page") {
+                        RegisterScreen(
+                            onBackToLogin = { navController.popBackStack() }
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ETS_Pemmob_Kelompok5Theme {
-        Greeting("Android")
     }
 }
