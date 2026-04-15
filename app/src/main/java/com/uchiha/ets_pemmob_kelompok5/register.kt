@@ -136,11 +136,15 @@ fun RegisterScreen(onBackToLogin: () -> Unit,
             // Tombol Daftar
             Button(
                 onClick = {
-                    if (password == confirmPassword) {
-                        Toast.makeText(context, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
-                        onRegisterSuccess()
+                    if (fullName.isNotEmpty() && emailOrPhone.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                        if (password == confirmPassword) {
+                            Toast.makeText(context, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
+                            onRegisterSuccess()
+                        } else {
+                            Toast.makeText(context, "Password tidak cocok!", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
-                        Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Isi seluruh data terlebih dahulu!", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
