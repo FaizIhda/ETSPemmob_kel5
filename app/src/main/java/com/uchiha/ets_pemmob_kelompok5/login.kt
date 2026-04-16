@@ -44,9 +44,10 @@ fun LoginScreen(
     onNavigateToRegister: () -> Unit, // Parameter untuk pindah ke register
     onLoginSuccess: (String) -> Unit // Parameter untuk pindah ke Dashboard
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var usernameInput by remember { mutableStateOf("") }
+    var passwordInput by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val userPrefs = remember { UserPrefs(context) }
     val warna_utama = Color(0xFF23C72A)
 
     Column(
@@ -68,8 +69,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
+            value = usernameInput,
+            onValueChange = { usernameInput = it },
             label = { Text("No. HP / Username / Email") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -82,8 +83,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = passwordInput,
+            onValueChange = { passwordInput = it },
             label = { Text("Password") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -106,11 +107,15 @@ fun LoginScreen(
         // Tombol Login
         Button(
             onClick = {
-                if (username.isNotEmpty() && password.isNotEmpty()) {
-                    Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                    onLoginSuccess(username) // Pindah ke Dashboard
-                } else {
+                val (savedUsername, savedPassword, savedFullName) = userPrefs.getUser()
+                
+                if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
                     Toast.makeText(context, "Isi username dan password!", Toast.LENGTH_SHORT).show()
+                } else if (usernameInput == savedUsername && passwordInput == savedPassword) {
+                    Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
+                    onLoginSuccess(savedFullName ?: usernameInput)
+                } else {
+                    Toast.makeText(context, "Username atau Password salah!", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier

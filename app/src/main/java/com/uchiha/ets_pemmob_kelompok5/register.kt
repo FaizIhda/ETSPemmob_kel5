@@ -32,7 +32,7 @@ class register : ComponentActivity() {
             ETS_Pemmob_Kelompok5Theme {
                 RegisterScreen(
                     onBackToLogin = { finish() },
-                    onRegisterSuccess = { /* Handle di sini jika dipanggil tanpa NavHost */ }
+                    onRegisterSuccess = { }
                 )
             }
         }
@@ -43,15 +43,15 @@ class register : ComponentActivity() {
 @Composable
 fun RegisterScreen(
     onBackToLogin: () -> Unit,
-    onRegisterSuccess: (String) -> Unit // 1. TAMBAHKAN (String) di sini
+    onRegisterSuccess: (String) -> Unit
 ) {
-    // State untuk input
     var fullName by remember { mutableStateOf("") }
     var emailOrPhone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+    val userPrefs = remember { UserPrefs(context) }
     val primaryGreen = Color(0xFF23C72A)
 
     Scaffold(
@@ -60,7 +60,6 @@ fun RegisterScreen(
                 title = { Text("Daftar", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBackToLogin) {
-                        // Menggunakan AutoMirrored agar sesuai standar terbaru
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
                     }
                 }
@@ -93,7 +92,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Field Nama Lengkap
             RegisterTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
@@ -103,7 +101,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Field Email / No HP
             RegisterTextField(
                 value = emailOrPhone,
                 onValueChange = { emailOrPhone = it },
@@ -113,7 +110,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Field Password
             RegisterTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -124,7 +120,6 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Field Konfirmasi Password
             RegisterTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
@@ -135,13 +130,12 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Tombol Daftar
             Button(
                 onClick = {
                     if (fullName.isNotEmpty() && emailOrPhone.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                         if (password == confirmPassword) {
+                            userPrefs.saveUser(emailOrPhone, password, fullName)
                             Toast.makeText(context, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
-                            // 2. GUNAKAN fullName di sini untuk dikirim ke MainActivity
                             onRegisterSuccess(fullName)
                         } else {
                             Toast.makeText(context, "Password tidak cocok!", Toast.LENGTH_SHORT).show()

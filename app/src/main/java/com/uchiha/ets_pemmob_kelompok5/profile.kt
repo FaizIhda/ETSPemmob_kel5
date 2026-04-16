@@ -29,6 +29,9 @@ fun ProfileScreen(
     onLogout: () -> Unit
 ) {
     val context = LocalContext.current
+    val userPrefs = remember { UserPrefs(context) }
+    val (savedUsername, _, savedFullName) = userPrefs.getUser()
+    
     val warnautama = Color(0xFF23C72A)
 
     Scaffold(
@@ -76,7 +79,7 @@ fun ProfileScreen(
 
                     Column {
                         Text(
-                            text = userName,
+                            text = savedFullName ?: userName,
                             color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
@@ -144,11 +147,9 @@ fun ProfileScreen(
                 elevation = CardDefaults.cardElevation(1.dp)
             ) {
                 Column {
-                    ProfileMenuRow(Icons.Default.AccountCircle, "Username", userName)
+                    ProfileMenuRow(Icons.Default.AccountCircle, "Username", savedFullName ?: userName)
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color(0xFFEEEEEE))
-                    ProfileMenuRow(Icons.Default.Email, "Email", "${userName.lowercase().replace(" ", "")}@email.com")
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color(0xFFEEEEEE))
-                    ProfileMenuRow(Icons.Default.Phone, "Nomor HP", "0812-3456-7890")
+                    ProfileMenuRow(Icons.Default.Email, "Email/No HP", savedUsername ?: "-")
                 }
             }
 
