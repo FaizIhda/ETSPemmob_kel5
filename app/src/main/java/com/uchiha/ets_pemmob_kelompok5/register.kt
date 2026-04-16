@@ -5,13 +5,12 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,8 +31,8 @@ class register : ComponentActivity() {
         setContent {
             ETS_Pemmob_Kelompok5Theme {
                 RegisterScreen(
-                    onBackToLogin = {finish()},
-                    onRegisterSuccess = {}
+                    onBackToLogin = { finish() },
+                    onRegisterSuccess = { /* Handle di sini jika dipanggil tanpa NavHost */ }
                 )
             }
         }
@@ -42,8 +41,10 @@ class register : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(onBackToLogin: () -> Unit,
-                   onRegisterSuccess: () -> Unit) {
+fun RegisterScreen(
+    onBackToLogin: () -> Unit,
+    onRegisterSuccess: (String) -> Unit // 1. TAMBAHKAN (String) di sini
+) {
     // State untuk input
     var fullName by remember { mutableStateOf("") }
     var emailOrPhone by remember { mutableStateOf("") }
@@ -58,8 +59,9 @@ fun RegisterScreen(onBackToLogin: () -> Unit,
             TopAppBar(
                 title = { Text("Daftar", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick =  onBackToLogin ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
+                    IconButton(onClick = onBackToLogin) {
+                        // Menggunakan AutoMirrored agar sesuai standar terbaru
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
                     }
                 }
             )
@@ -70,7 +72,7 @@ fun RegisterScreen(onBackToLogin: () -> Unit,
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp)
-                .verticalScroll(rememberScrollState()), // Supaya bisa di-scroll jika keyboard muncul
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
@@ -139,7 +141,8 @@ fun RegisterScreen(onBackToLogin: () -> Unit,
                     if (fullName.isNotEmpty() && emailOrPhone.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                         if (password == confirmPassword) {
                             Toast.makeText(context, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
-                            onRegisterSuccess()
+                            // 2. GUNAKAN fullName di sini untuk dikirim ke MainActivity
+                            onRegisterSuccess(fullName)
                         } else {
                             Toast.makeText(context, "Password tidak cocok!", Toast.LENGTH_SHORT).show()
                         }
@@ -158,7 +161,6 @@ fun RegisterScreen(onBackToLogin: () -> Unit,
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Syarat & Ketentuan
             Text(
                 text = "Dengan mendaftar, Anda menyetujui Syarat & Ketentuan serta Kebijakan Privasi kami.",
                 fontSize = 12.sp,

@@ -1,6 +1,6 @@
 package com.uchiha.ets_pemmob_kelompok5
 
-// Import library yang diperlukan
+// Import libary
 import android.R.attr.text
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -22,14 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    userName: String,
+    onNavigateToProfile: () -> Unit) {
     // Melacak produk mana yang sedang diklik user (null = halaman utama)
     var selectedProduct by remember { mutableStateOf<Product?>(null) }
     // Melacak posisi navbar yang aktif
     var selectedTab by remember { mutableIntStateOf(0) }
     val primaryGreen = Color(0xFF23C72A)
 
-    // List yg berisi objek produk untuk ditampilkan
+    // List yg berisi objek produk untuk ditampilkan dengan menggunakan listOf
     val productList = listOf(
         Product(1, "Sepatu Bola Nike Tiempo10", "Rp 1.200.000", "Nike Tiempo Bola, BNIB", "Uchiha Store", "4.8", R.drawable.a1),
         Product(2, "Penggaris Besi Joyko", "Rp 9.000.000", "Penggaris terkuat di bumi", "AKu Cinta Kamu 123", "4.9", R.drawable.a2),
@@ -46,7 +48,11 @@ fun DashboardScreen() {
             bottomBar = {
                 DashboardFooter(
                     selectedTab = selectedTab,
-                    onTabSelected = { index -> selectedTab = index },
+                    onTabSelected = { index -> selectedTab = index
+                        if (index == 2) {
+                            onNavigateToProfile()
+                        } // jika user klik icon profile maka akan pindah
+                                    },
                     themeColor = primaryGreen
                 )
             }

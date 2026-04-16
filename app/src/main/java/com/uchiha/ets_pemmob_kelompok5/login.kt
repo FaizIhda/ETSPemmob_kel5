@@ -41,13 +41,13 @@ class login : ComponentActivity() {
 
 @Composable
 fun LoginScreen(
-    onNavigateToRegister: () -> Unit,
-    onLoginSuccess: () -> Unit // Parameter untuk pindah ke Dashboard
+    onNavigateToRegister: () -> Unit, // Parameter untuk pindah ke register
+    onLoginSuccess: (String) -> Unit // Parameter untuk pindah ke Dashboard
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val shopeeOrange = Color(0xFF23C72A)
+    val warna_utama = Color(0xFF23C72A)
 
     Column(
         modifier = Modifier
@@ -62,7 +62,7 @@ fun LoginScreen(
             painter = painterResource(id = android.R.drawable.ic_menu_send),
             contentDescription = "Logo",
             modifier = Modifier.size(80.dp),
-            tint = shopeeOrange
+            tint = warna_utama
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -74,8 +74,8 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = shopeeOrange,
-                focusedLabelColor = shopeeOrange
+                focusedBorderColor = warna_utama,
+                focusedLabelColor = warna_utama
             )
         )
 
@@ -90,8 +90,8 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = shopeeOrange,
-                focusedLabelColor = shopeeOrange
+                focusedBorderColor = warna_utama,
+                focusedLabelColor = warna_utama
             )
         )
 
@@ -108,7 +108,7 @@ fun LoginScreen(
             onClick = {
                 if (username.isNotEmpty() && password.isNotEmpty()) {
                     Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
-                    onLoginSuccess() // Pindah ke Dashboard
+                    onLoginSuccess(username) // Pindah ke Dashboard
                 } else {
                     Toast.makeText(context, "Isi username dan password!", Toast.LENGTH_SHORT).show()
                 }
@@ -117,7 +117,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .height(50.dp),
             shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = shopeeOrange)
+            colors = ButtonDefaults.buttonColors(containerColor = warna_utama)
         ) {
             Text("Log In", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
@@ -148,7 +148,7 @@ fun LoginScreen(
         ) {
             Text("Baru di Marketplace?")
             TextButton(onClick = { onNavigateToRegister() }) { // Pindah ke Register
-                Text("Daftar", color = shopeeOrange, fontWeight = FontWeight.Bold)
+                Text("Daftar", color = warna_utama, fontWeight = FontWeight.Bold)
             }
         }
     }

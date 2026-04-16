@@ -24,14 +24,12 @@ class MainActivity : ComponentActivity() {
                     // 1. Rute ke halaman Login
                     composable("login") {
                         LoginScreen(
-                            // Ke Register jika klik "Daftar"
                             onNavigateToRegister = {
                                 navController.navigate("register")
                             },
-                            // Ke Dashboard jika klik "Log In"
-                            onLoginSuccess = {
-                                navController.navigate("dashboard") {
-                                    // Hapus halaman login dari history agar tidak bisa back ke login
+                            onLoginSuccess = { inputName ->
+                                // Mengirim nama ke rute dashboard/{userName}
+                                navController.navigate("dashboard/$inputName") {
                                     popUpTo("login") { inclusive = true }
                                 }
                             }
@@ -44,9 +42,10 @@ class MainActivity : ComponentActivity() {
                             onBackToLogin = {
                                 navController.popBackStack()
                             },
-                            onRegisterSuccess = {
-                                // Biasanya setelah daftar langsung masuk dashboard
-                                navController.navigate("dashboard") {
+                            onRegisterSuccess = { registeredName ->
+                                // Sekarang 'registeredName' berisi variabel 'fullName' dari register.kt
+                                navController.navigate("dashboard/$registeredName") {
+                                    // Menghapus 'login' dan 'register' dari backstack
                                     popUpTo("login") { inclusive = true }
                                 }
                             }
@@ -54,8 +53,31 @@ class MainActivity : ComponentActivity() {
                     }
 
                     // 3. Rute ke halaman Dashboard
-                    composable("dashboard") {
-                        DashboardScreen()
+                    composable("dashboard/{userName}") { backStackEntry ->
+                        val userName = backStackEntry.arguments?.getString("userName") ?: "Guest"
+                        DashboardScreen(
+                            userName = userName,
+                            onNavigateToProfile = {
+                                navController.navigate("profile/$userName")
+                            }
+                        )
+                    }
+
+                    // 4. Rute ke halaman Profile
+                    composable("profile/{userName}") { backStackEntry ->
+                        val userName = backStackEntry.arguments?.getString("userName") ?: "User"
+                        ProfileScreen(
+                            userName = userName,
+                            onNavigateToDashboard = {
+                                navController.popBackStack()
+                            },
+                            onLogout = {
+                                navController.navigate("login") {
+                                    // popUpTo(0) memastikan semua screen di stack dihapus
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        )
                     }
                 }
             }
