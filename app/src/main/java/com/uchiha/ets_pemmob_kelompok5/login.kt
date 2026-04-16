@@ -59,7 +59,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(80.dp))
 
         Icon(
-            painter = painterResource(id = android.R.drawable.ic_menu_send),
+            painter = painterResource(id = R.drawable.logokubeli),
             contentDescription = "Logo",
             modifier = Modifier.size(80.dp),
             tint = warna_utama
