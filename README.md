@@ -1,15 +1,26 @@
-# ETSPemmob_kel5
+Judul: Tugas Evaluasi Tengah Semester (ETS) - Pemrograman Perangkat Bergerak
+Deskripsi Aplikasi
+kubeli adalah aplikasi Android berbasis modern yang dibangun menggunakan Jetpack Compose.
+Aplikasi ini menerapkan standar UI/UX modern dengan Material Design 3, memastikan antarmuka yang bersih, responsif, dan nyaman digunakan di berbagai ukuran layar perangkat Android.
+Daftar Fitur Utama
+1. Multi-Screen Navigation: Perpindahan antar halaman yang mulus.
+2. Modern UI Components: Menggunakan komponen Material 3 (TopAppBar, Cards, FloatingActionButton, dll).
+3. Data Display (List/Grid): Menampilkan sekumpulan data secara efisien.
+4. Detail Information: Halaman khusus untuk melihat informasi rinci dari item tertentu.
+5. State Management: Pengelolaan data yang responsif terhadap perubahan layar (Recomposition).
+Deskripsi Fitur
+1. Navigasi Antar Halaman (Jetpack Navigation)
+Fitur ini memungkinkan pengguna untuk berpindah dari satu layar ke layar lain (misalnya dari halaman Beranda ke halaman Detail) tanpa kehilangan konteks. Menggunakan navigation-compose untuk menangani backstack dengan efisien.
+2. Antarmuka Material 3
+Seluruh elemen visual aplikasi menggunakan library androidx.compose.material3. Fitur ini mencakup penggunaan skema warna yang dinamis, tipografi yang jelas, dan komponen interaktif yang mengikuti panduan desain terbaru dari Google.
+3. Tampilan List yang Responsif (Lazy Layout)
+Aplikasi mampu menampilkan daftar data (seperti daftar produk/berita/kontak) menggunakan LazyColumn atau LazyGrid. Fitur ini memastikan performa aplikasi tetap ringan meskipun data yang ditampilkan berjumlah banyak.
+4. Halaman Detail Dinamis
+Saat pengguna memilih salah satu item dari daftar, aplikasi akan mengarahkan ke halaman detail. Fitur ini menangani pengiriman data (argumen) antar layar untuk menampilkan informasi yang lebih spesifik dan mendalam.
 
-Kelompok 5 membuat sebuah aplikasi marketplace dengan nama "kubeli". Warna utama aplikasi adalah hijau, kemudian terdapat 4 page yaitu login, register, dashboard, dan profil.
-
-Role Kelompok:
-Faiz Ihda Husni Husodo | 24082010138 as a Captain
-Nayla Arviandini W | 24082010146 as a Hustler
-Nicholas Napitupulu | 24082010158 as a Hacker
-Axel Arwanov | 24082010169 as a Hipster
-
-Task:
-Faiz = Ide aplikasi, logic apk, perpindahan antar page, interface yang menampilkan beberapa data sekaligus, dan interface untuk menampilkan informasi detail dari listview ketika salah satu item di click.
-Nayla = Ide aplikasi, perpindahan antar page, design logo apk, dan interface yang memiliki form pendataan.
-Nicholas = Ide aplikasi, perpindahan antar page, interface yang menampilkan data dari form pendataan, dan interface untuk menampilkan informasi detail dari listview ketika salah satu item di click.
-Axel = Ide aplikasi, interface yang menampilkan beberapa data sekaligus, logic apk, dan interface untuk menampilkan informasi detail dari listview ketika salah satu item di click.
+Teknologi yang Digunakan :
+•Bahasa: Kotlin
+•UI Framework: Jetpack Compose
+•Design System: Material Design 3
+•Navigation: Compose Navigation
+•Lifecycle: ViewModel & LiveData/State
